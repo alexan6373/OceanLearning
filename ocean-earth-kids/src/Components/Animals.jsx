@@ -4,14 +4,64 @@ import React, { useState } from 'react';
 
 function Animals() {
     const[quizOn, toggleQuiz] = useState(false);
-    const questions = [["Question 1", ["A", "B", "C"], 2],
-                       ["Question 2", ["A", "B", "C"], 0],
-                       ["Question 3", ["A", "B", "C"], 2],
-                       ["Question 4", ["A", "B", "C"], 1],
-                       ["Question 5", ["A", "B", "C"], 1],
-                       ["Question 6", ["A", "B", "C"], 0],
-                       ["Question 7", ["A", "B", "C"], 2],
-                       ["Question 8", ["A", "B", "C"], 2]];
+    const questions = [
+        {
+            id: 1,
+            text: "What is the 'Great Pacific Garbage Patch' mostly made of?",
+            options: ["Sunken ships", "Plastic waste", "Oil spills"],
+            correct: "Plastic waste"
+        },
+        {
+            id: 2,
+            text: "Which of these helps protect coastlines from storms and filtering water?",
+            options: ["Mangrove forests", "Concrete piers", "Speed boats"],
+            correct: "Mangrove forests"
+        },
+        {
+            id: 3,
+            text: "What happens when coral reefs get too stressed by warm water?",
+            options: ["They turn blue", "They grow faster", "They turn white (bleaching)"],
+            correct: "They turn white (bleaching)"
+        },
+        {
+            id: 4,
+            text: "Which animal is famous for keeping kelp forests healthy by eating sea urchins?",
+            options: ["Sea Otter", "Seahorse", "Great White Shark"],
+            correct: "Sea Otter"
+        },
+        {
+            id: 5,
+            text: "What are 'Ghost Nets' in the ocean?",
+            options: ["Transparent jellyfish", "Abandoned fishing nets", "Fog over the water"],
+            correct: "Abandoned fishing nets"
+        },
+        {
+            id: 6,
+            text: "Why are microplastics dangerous to ocean animals?",
+            options: ["They are too salty", "They are mistaken for food", "They block the sun"],
+            correct: "They are mistaken for food"
+        },
+        {
+            id: 7,
+            text: "Which of these is a way to reduce ocean plastic?",
+            options: ["Using reusable bags", "Throwing trash in rivers", "Buying more bottled water"],
+            correct: "Using reusable bags"
+        },
+        {
+            id: 8,
+            text: "How much of the Earth's oxygen is produced by the ocean (phytoplankton)?",
+            options: ["About 10%", "About 50%", "About 90%"],
+            correct: "About 50%"
+        }
+    ];
+    // const questions = [["Question 1", ["A", "B", "C"], 2],
+    //                    ["Question 2", ["A", "B", "C"], 0],
+    //                    ["Question 3", ["A", "B", "C"], 2],
+    //                    ["Question 4", ["A", "B", "C"], 1],
+    //                    ["Question 5", ["A", "B", "C"], 1],
+    //                    ["Question 6", ["A", "B", "C"], 0],
+    //                    ["Question 7", ["A", "B", "C"], 2],
+    //                    ["Question 8", ["A", "B", "C"], 2]];
 
     const[questionIndex, setQuestionIndex] = useState(Math.floor(Math.random() * questions.length))
     const[selectedAnswer, setSelectedAnswer] = useState("")
@@ -26,9 +76,19 @@ function Animals() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const correctAnswer = questions[questionIndex][2]
+        // const correctAnswer = questions[questionIndex][2]
 
-        if (selectedAnswer == questions[questionIndex][1][correctAnswer]) {
+        // if (selectedAnswer == questions[questionIndex][1][correctAnswer]) {
+        //     addFish();
+        //     alert("Correct!!!!");
+        // } else {
+        //     removeFish();
+        //     alert("wrong, L bozo");
+        // }
+
+        const correctAnswer = questions[questionIndex].correct
+
+        if (selectedAnswer == correctAnswer) {
             addFish();
             alert("Correct!!!!");
         } else {
@@ -46,22 +106,17 @@ function Animals() {
         return (
             <div className='question'>
                 <form onSubmit={handleSubmit}>
-                    {questions[questionIndex][0]} <br/>
+                    {questions[questionIndex].text} <br/> <br/>
                     
-                    {questions[questionIndex][1].map((option) => (
+                    {questions[questionIndex].options.map((option) => (
                         <label key={option}>
                             <input type='radio' name='quiz' value={option} onChange={changeAnswer} required/>
-                            {option} <br/>
+                            {" " + option} <br/>
                         </label>
                     ))}
 
-                    {/* <label>
-                        <input type='radio' name='quiz' required/> Correct <br/>
-                    </label>
-                    <label>
-                        <input type='radio' name='quiz' required/> Incorrect <br/>
-                    </label> */}
-
+                    <br/>
+                    
                     <button type="submit">Submit answer</button>
                 </form>
             </div>
