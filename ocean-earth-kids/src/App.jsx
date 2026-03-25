@@ -1,5 +1,6 @@
 import './App.css'
 import Animals from './Components/Animals.jsx'
+import { useState } from 'react';
 
 function App() {
   const bubbleCount = Array.from({ length: 80});
@@ -29,7 +30,10 @@ function App() {
       </div>
 
       <footer className='ocean-floor'>
-        <div className='sand'/>
+        <div className='sand'>
+          
+        </div>
+        
       </footer>
     </main>
   );

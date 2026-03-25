@@ -54,19 +54,11 @@ function Animals() {
             correct: "About 50%"
         }
     ];
-    // const questions = [["Question 1", ["A", "B", "C"], 2],
-    //                    ["Question 2", ["A", "B", "C"], 0],
-    //                    ["Question 3", ["A", "B", "C"], 2],
-    //                    ["Question 4", ["A", "B", "C"], 1],
-    //                    ["Question 5", ["A", "B", "C"], 1],
-    //                    ["Question 6", ["A", "B", "C"], 0],
-    //                    ["Question 7", ["A", "B", "C"], 2],
-    //                    ["Question 8", ["A", "B", "C"], 2]];
 
     const[questionIndex, setQuestionIndex] = useState(Math.floor(Math.random() * questions.length))
     const[selectedAnswer, setSelectedAnswer] = useState("")
 
-    const[numFish, setNumFish] = useState(1);
+    const[numFish, setNumFish] = useState(0);
     const[fishes, setFishes] = useState([]);
     // counter for fish: correct = more fish, incorrect = less fish
 
@@ -76,24 +68,15 @@ function Animals() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // const correctAnswer = questions[questionIndex][2]
-
-        // if (selectedAnswer == questions[questionIndex][1][correctAnswer]) {
-        //     addFish();
-        //     alert("Correct!!!!");
-        // } else {
-        //     removeFish();
-        //     alert("wrong, L bozo");
-        // }
 
         const correctAnswer = questions[questionIndex].correct
 
         if (selectedAnswer == correctAnswer) {
             addFish();
-            alert("Correct!!!!");
+            alert("Good job. That is correct.");
         } else {
             removeFish();
-            alert("wrong, L bozo");
+            alert("Sorry, the correct answer is \"" + correctAnswer + "\"");
         }
 
         setQuestionIndex(Math.floor(Math.random() * questions.length))
@@ -101,8 +84,6 @@ function Animals() {
     };
 
     const askQuestion = () => {
-        // var questionIndex = Math.floor(Math.random() * questions.length)
-
         return (
             <div className='question'>
                 <form onSubmit={handleSubmit}>
@@ -116,7 +97,7 @@ function Animals() {
                     ))}
 
                     <br/>
-                    
+
                     <button type="submit">Submit answer</button>
                 </form>
             </div>
@@ -149,13 +130,8 @@ function Animals() {
             <div>
                 {quizOn && askQuestion()}
             </div>
-{/*             
-            <div className='octopus2'>
-                <img src={octopus} className="octopus-image" onClick={() => removeFish()}/>
-            </div> */}
 
             <div className='fishes'>
-                {numFish}
                 {fishes.map((fish) => (
                     <div
                         key={fish.id}
@@ -170,6 +146,11 @@ function Animals() {
                         🐟
                     </div>
                 ))}
+            </div>
+
+            <div className='scoreboard'>
+                {numFish == 1 ? "Score: " + numFish + " fish" :
+                                "Score: " + numFish + " fishes" }
             </div>
         </div>
     )

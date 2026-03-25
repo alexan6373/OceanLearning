@@ -86,12 +86,23 @@
   z-index: 1;
 }
 
+.scoreboard {
+  padding: 15px;
+  text-align: center;
+  font-size: 40px;
+  z-index: 3;
+}
+
 .ocean-floor {
   position: absolute;
   bottom: 0;
   width: 100%;
   height: 15vh;
   background: #f4d03f;
+
+  text-align: center;
+  align-content: center;
+  font-size: 40px;
 }
 
 /* :root {
