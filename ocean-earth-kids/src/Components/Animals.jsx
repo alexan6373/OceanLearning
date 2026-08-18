@@ -1,68 +1,18 @@
-import '.././App.css'
-import octopus from '../assets/octopus.webp'
-import fish_img from '../assets/fish.png'
+import '.././App.css';
+import octopusImg from '../assets/octopus.webp';
+import fishImg from '../assets/fish.png';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '../lib/supabaseClient';
 
 function Animals() {
     const[quizOn, toggleQuiz] = useState(false);
-    // const questions = [
-    //     {
-    //         id: 1,
-    //         text: "What is the 'Great Pacific Garbage Patch' mostly made of?",
-    //         options: ["Sunken ships", "Plastic waste", "Oil spills"],
-    //         correct: "Plastic waste"
-    //     },
-    //     {
-    //         id: 2,
-    //         text: "Which of these helps protect coastlines from storms and filtering water?",
-    //         options: ["Mangrove forests", "Concrete piers", "Speed boats"],
-    //         correct: "Mangrove forests"
-    //     },
-    //     {
-    //         id: 3,
-    //         text: "What happens when coral reefs get too stressed by warm water?",
-    //         options: ["They turn blue", "They grow faster", "They turn white (bleaching)"],
-    //         correct: "They turn white (bleaching)"
-    //     },
-    //     {
-    //         id: 4,
-    //         text: "Which animal is famous for keeping kelp forests healthy by eating sea urchins?",
-    //         options: ["Sea Otter", "Seahorse", "Great White Shark"],
-    //         correct: "Sea Otter"
-    //     },
-    //     {
-    //         id: 5,
-    //         text: "What are 'Ghost Nets' in the ocean?",
-    //         options: ["Transparent jellyfish", "Abandoned fishing nets", "Fog over the water"],
-    //         correct: "Abandoned fishing nets"
-    //     },
-    //     {
-    //         id: 6,
-    //         text: "Why are microplastics dangerous to ocean animals?",
-    //         options: ["They are too salty", "They are mistaken for food", "They block the sun"],
-    //         correct: "They are mistaken for food"
-    //     },
-    //     {
-    //         id: 7,
-    //         text: "Which of these is a way to reduce ocean plastic?",
-    //         options: ["Using reusable bags", "Throwing trash in rivers", "Buying more bottled water"],
-    //         correct: "Using reusable bags"
-    //     },
-    //     {
-    //         id: 8,
-    //         text: "How much of the Earth's oxygen is produced by the ocean (phytoplankton)?",
-    //         options: ["About 10%", "About 50%", "About 90%"],
-    //         correct: "About 50%"
-    //     }
-    // ];
-
-    // const[questionIndex, setQuestionIndex] = useState(Math.floor(Math.random() * questions.length))
     
-    // counter for fish: correct = more fish, incorrect = less fish
-    const[numFish, setNumFish] = useState(0);
+    // Counter for fish: correct = more fish, incorrect = less fish
+    const[numFish, setNumFish] = useState(
+        Number(localStorage.getItem("numFish")) || 0
+    );
     const[fishes, setFishes] = useState([]);
 
     const addFish = () => {
@@ -74,12 +24,14 @@ function Animals() {
         }));
 
         setFishes([...fishes, ...newFish]);
-        setNumFish(numFish + 1)
+        setNumFish(numFish + 1);
+        localStorage.setItem("numFish", numFish + 1);
     };
 
     const removeFish = () => {
         setFishes(fishes.slice(0, -1));
-        setNumFish(Math.max(numFish - 1, 0))
+        setNumFish(Math.max(numFish - 1, 0));
+        localStorage.setItem("numFish", Math.max(numFish - 1, 0));
     };
     
     const [question, setQuestion] = useState([]);
@@ -87,32 +39,23 @@ function Animals() {
     const [correctAnswer, setCorrectAnswer] = useState("");
     const [selectedAnswer, setSelectedAnswer] = useState("");
     const [isSubmitted, setSubmitted] = useState(false);
-    
-    const changeAnswer = (e) => {
-        setSelectedAnswer(e.target.value)
-    }
 
+    // Submits the question
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (selectedAnswer === randomQuestion.correct_answer) {
+        if (selectedAnswer === randomQuestion.correct_answer)
             addFish();
-            // alert("Good job. That is correct.");
-        } else {
+        else
             removeFish();
-            // alert("Sorry, the correct answer is option " + correctAnswer);
-        }
 
         setSubmitted(true);
-
-        // setQuestionIndex(Math.floor(Math.random() * questions.length))
-        // getQuestion();
-        // askQuestion();
     };
 
     useEffect(() => {
         getQuestion();
     }, [])
 
+    // Generates a random question
     const getQuestion = async () => {
         const { data, error } = await supabase.from('questions').select('*')
 
@@ -124,28 +67,31 @@ function Animals() {
         const question = data[Math.floor(Math.random() * data.length)];
         
         setRandomQuestion(question);
-        if (question.correctAnswer == "A")
+        if (question.correctAnswer === "A")
             setCorrectAnswer(question.option_a);
-        else if (question.correctAnswer == "A")
+        else if (question.correctAnswer === "B")
             setCorrectAnswer(question.option_b);
         else
             setCorrectAnswer(question.option_c);
     }
     
+    // Accesses the next question
     const nextQuestion = () => {
         setSubmitted(false);
         setRandomQuestion(null);
         getQuestion();
-        // askQuestion();
     }
 
-    const askQuestion = () => {
+    const changeAnswer = (e) => {
+        setSelectedAnswer(e.target.value);
+    }
+
+    const displayQuestion = () => {
         if (!randomQuestion) {
             return (
                 <div className='question'>
                     Loading...
                 </div>
-                
             )
         }
 
@@ -192,11 +138,11 @@ function Animals() {
     return (
         <div className="animals">
             <div className='octopus'>
-                <img src={octopus} className="octopus-image" onClick={() => toggleQuiz(true)}/>
+                <img src={octopusImg} className="octopus-image" onClick={() => toggleQuiz(true)}/>
             </div>
 
             <div className="quiz-area">
-                {quizOn && askQuestion()}
+                {quizOn && displayQuestion()}
             </div>
 
             <div className='fishes'>
@@ -211,7 +157,7 @@ function Animals() {
                             animationDelay: `${fish.delay}s`,
                             animationDuration: `${fish.duration}s`
                         }}>
-                        <img src={fish_img}/>
+                        <img src={fishImg}/>
                     </div>
                 ))}
             </div>
@@ -224,4 +170,4 @@ function Animals() {
     )
 }
 
-export default Animals
+export default Animals;
