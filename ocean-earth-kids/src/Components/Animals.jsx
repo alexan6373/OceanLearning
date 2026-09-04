@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 function Animals() {
+    const[difficulty, setDifficulty] = useState("easy");
+
     const[quizOn, toggleQuiz] = useState(false);
     
     // Counter for fish: correct = more fish, incorrect = less fish
@@ -165,6 +167,16 @@ function Animals() {
             <div className='scoreboard'>
                 {numFish == 1 ? "Score: " + numFish + " fish" :
                                 "Score: " + numFish + " fishes" }
+            </div>
+            
+            <div className='difficulty'>
+                <button onClick={() => setDifficulty("easy")}>Easy</button>
+                <button onClick={() => setDifficulty("medium")}>Medium</button>
+                <button onClick={() => setDifficulty("hard")}>Hard</button>
+            </div>
+            
+            <div className='difficulty'>
+                {difficulty}
             </div>
         </div>
     )
