@@ -1,18 +1,20 @@
+
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
+  color: #222222;
+  background: rgba(192, 132, 252, 0.15);
   border: 2px solid transparent;
   transition: border-color 0.3s;
   margin-bottom: 24px;
 
   &:hover {
-    border-color: var(--accent-border);
+    border-color: #222222;
   }
   &:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid #222222;
     outline-offset: 2px;
   }
 }
@@ -47,8 +49,8 @@
 
 .octopus {
   position: absolute;
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 300px;
   left: 6%;
   bottom: 15%;
   animation: bobbing 6s infinite ease-in-out;
@@ -80,6 +82,34 @@
   text-align: center;
   font-size: 40px;
   z-index: 3;
+}
+
+.difficulty-button-container {
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.difficulty-button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 40px;
+  border-radius: 5px;
+  color: #222222;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: #222222;
+  }
+  &:focus-visible {
+    outline: 2px solid #222222;
+    outline-offset: 2px;
+  }
 }
 
 .difficulty {

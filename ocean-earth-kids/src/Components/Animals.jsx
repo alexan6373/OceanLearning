@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 function Animals() {
-    const[difficulty, setDifficulty] = useState("easy");
+    const[difficulty, setDifficulty] = useState("Easy");
 
     const[quizOn, toggleQuiz] = useState(false);
     
@@ -169,10 +169,10 @@ function Animals() {
                                 "Score: " + numFish + " fishes" }
             </div>
             
-            <div className='difficulty'>
-                <button onClick={() => setDifficulty("easy")}>Easy</button>
-                <button onClick={() => setDifficulty("medium")}>Medium</button>
-                <button onClick={() => setDifficulty("hard")}>Hard</button>
+            <div className='difficulty-button-container'>
+                <button className='difficulty-button' onClick={() => setDifficulty("Easy")}>Easy</button>
+                <button className='difficulty-button' onClick={() => setDifficulty("Medium")}>Medium</button>
+                <button className='difficulty-button' onClick={() => setDifficulty("Hard")}>Hard</button>
             </div>
             
             <div className='difficulty'>
