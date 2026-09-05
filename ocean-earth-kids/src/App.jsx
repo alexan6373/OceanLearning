@@ -1,12 +1,13 @@
-import './App.css'
-import LogInPage from './Components/LogInPage.jsx';
-import Quiz from './Components/Quiz.jsx'
+import './styles/App.css';
+import LogInPage from './components/LogInPage.jsx';
+import Quiz from './components/Quiz.jsx'
+import { useAuth } from './components/AuthContext.jsx';
+
 import { useState } from 'react';
 
 function App() {
   const bubbleCount = Array.from({ length: 80});
-
-  const[isLoggedIn, setLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   return (
     <main className='ocean-container'>

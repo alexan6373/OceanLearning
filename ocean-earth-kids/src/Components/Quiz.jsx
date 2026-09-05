@@ -1,31 +1,20 @@
-import '.././App.css';
+import '../styles/Quiz.css';
 import octopusImg from '../assets/octopus.webp';
+import turtleImg from '../assets/turtle.webp';
 import fishImg from '../assets/fish.png';
+import { useAuth } from './AuthContext.jsx';
+import { supabase } from '../lib/supabaseClient.js';
 
 import { useEffect, useState } from 'react';
 
-import { supabase } from '../lib/supabaseClient';
-
 function Quiz() {
-    const[difficulty, setDifficulty] = useState(1);
+    const { isLoggedIn, setIsLoggedIn } = useAuth();
 
-    const difficultyMap = {
-        1: "Easy",
-        2: "Medium",
-        3: "Hard"
-    }
-
-    const[quizOn, toggleQuiz] = useState(false);
-    
     // ---------------------
     // Deals with fish logic
     // ---------------------
     const[numFish, setNumFish] = useState(
         Number(localStorage.getItem("numFish")) || 0
-
-        // for (int i = 0; i < numFish; i++) {
-        //     addFish();
-        // }
     );
 
     useEffect(() => {
@@ -63,6 +52,15 @@ function Quiz() {
     // ---------------------
     // Deals with quiz logic
     // ---------------------
+
+    const[difficulty, setDifficulty] = useState(1);
+    const difficultyMap = {
+        1: "Easy",
+        2: "Medium",
+        3: "Hard"
+    }
+
+    const[quizOn, toggleQuiz] = useState(false);
 
     const [question, setQuestion] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
@@ -136,19 +134,19 @@ function Quiz() {
                         Question Difficulty: {difficultyMap[randomQuestion.difficulty]} <br/> <br/>
 
                         <button
-                            className={"answer-button"}
+                            className='answer-button'
                             onClick={() => setSelectedAnswer("A")}>
                             {"    " + randomQuestion.option_a}
                         </button> <br/>
 
                         <button
-                            className={"answer-button"}
+                            className='answer-button'
                             onClick={() => setSelectedAnswer("B")}>
                             {"    " + randomQuestion.option_b}
                         </button> <br/>
 
                         <button
-                            className={"answer-button"}
+                            className='answer-button'
                             onClick={() => setSelectedAnswer("C")}>
                             {"    " + randomQuestion.option_c}
                         </button> <br/>
@@ -217,6 +215,10 @@ function Quiz() {
                 <button
                     className={`difficulty-button ${difficulty === 3 ? " selected" : ""}`}
                     onClick={() => setDifficulty(3)}>Hard</button>
+            </div>
+
+            <div className='turtle'>
+                <img src={turtleImg} className="turtle-image" onClick={() => setIsLoggedIn(false)}/>
             </div>
         </div>
     )

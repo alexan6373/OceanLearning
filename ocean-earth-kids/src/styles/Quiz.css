@@ -1,22 +1,3 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: #222222;
-  background: rgba(192, 132, 252, 0.15);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: #222222;
-  }
-  &:focus-visible {
-    outline: 2px solid #222222;
-    outline-offset: 2px;
-  }
-}
-
 .question-form {
   position: absolute;
   width: 350px;
@@ -91,20 +72,6 @@
   height: 100%;
 }
 
-.turtle {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  right: 6%;
-  bottom: 2%;
-  z-index: 2;
-}
-
-.turtle-image {
-  width: 100%;
-  height: 100%;
-}
-
 @keyframes fish-swim {
   0% {
     transform: translateX(10vw);
@@ -160,4 +127,18 @@
 
 .difficulty-button.selected {
   border-color: #222222;
+}
+
+.turtle {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  right: 6%;
+  bottom: 2%;
+  z-index: 2;
+}
+
+.turtle-image {
+  width: 100%;
+  height: 100%;
 }
