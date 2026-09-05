@@ -14,7 +14,7 @@ function Quiz() {
     // Deals with fish logic
     // ---------------------
     const[numFish, setNumFish] = useState(
-        Number(localStorage.getItem("numFish")) || 0
+        Number(localStorage.getItem('numFish')) || 0
     );
 
     useEffect(() => {
@@ -40,13 +40,13 @@ function Quiz() {
 
         setFishes([...fishes, ...newFish]);
         setNumFish(numFish + 1);
-        localStorage.setItem("numFish", numFish + 1);
+        localStorage.setItem('numFish', numFish + 1);
     };
 
     const removeFish = () => {
         setFishes(fishes.slice(0, -1));
         setNumFish(Math.max(numFish - 1, 0));
-        localStorage.setItem("numFish", Math.max(numFish - 1, 0));
+        localStorage.setItem('numFish', Math.max(numFish - 1, 0));
     };
     
     // ---------------------
@@ -55,17 +55,17 @@ function Quiz() {
 
     const[difficulty, setDifficulty] = useState(1);
     const difficultyMap = {
-        1: "Easy",
-        2: "Medium",
-        3: "Hard"
+        1: 'Easy',
+        2: 'Medium',
+        3: 'Hard'
     }
 
     const[quizOn, toggleQuiz] = useState(false);
 
     const [question, setQuestion] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
-    const [correctAnswer, setCorrectAnswer] = useState("");
-    const [selectedAnswer, setSelectedAnswer] = useState("");
+    const [correctAnswer, setCorrectAnswer] = useState('');
+    const [selectedAnswer, setSelectedAnswer] = useState('');
     const [isSubmitted, setSubmitted] = useState(false);
 
     // Submits the question
@@ -97,11 +97,11 @@ function Quiz() {
         const question = data[Math.floor(Math.random() * data.length)];
         
         setRandomQuestion(question);
-        if (question.correct_answer === "A")
+        if (question.correct_answer === 'A')
             setCorrectAnswer(question.option_a);
-        else if (question.correct_answer === "B")
+        else if (question.correct_answer === 'B')
             setCorrectAnswer(question.option_b);
-        else if (question.correct_answer === "C")
+        else if (question.correct_answer === 'C')
             setCorrectAnswer(question.option_c);
     }
     
@@ -135,20 +135,20 @@ function Quiz() {
 
                         <button
                             className='answer-button'
-                            onClick={() => setSelectedAnswer("A")}>
-                            {"    " + randomQuestion.option_a}
+                            onClick={() => setSelectedAnswer('A')}>
+                            {'    ' + randomQuestion.option_a}
                         </button> <br/>
 
                         <button
                             className='answer-button'
-                            onClick={() => setSelectedAnswer("B")}>
-                            {"    " + randomQuestion.option_b}
+                            onClick={() => setSelectedAnswer('B')}>
+                            {'    ' + randomQuestion.option_b}
                         </button> <br/>
 
                         <button
                             className='answer-button'
-                            onClick={() => setSelectedAnswer("C")}>
-                            {"    " + randomQuestion.option_c}
+                            onClick={() => setSelectedAnswer('C')}>
+                            {'    ' + randomQuestion.option_c}
                         </button> <br/>
                         <br/>
                     </form>
@@ -158,14 +158,14 @@ function Quiz() {
             return (
                 <div className='question-form'>
                     {selectedAnswer === randomQuestion.correct_answer ?
-                    "CORRECT" : (
+                    'CORRECT' : (
                         <>
                             NO NO NO MY FRIEND <br/> <br/>
-                            {"The correct answer is \"" + correctAnswer + "\""}
+                            {'The correct answer is \'' + correctAnswer + '\''}
                         </>
                     )} <br/> <br/>
 
-                    { "Explanation: " + randomQuestion.explanation } <br/> <br/>
+                    { 'Explanation: ' + randomQuestion.explanation } <br/> <br/>
 
                     <button className='submit-quiz' onClick={nextQuestion}>Next Question</button>
                 </div>
@@ -174,12 +174,12 @@ function Quiz() {
     }
 
     return (
-        <div className="animals">
+        <div className='animals'>
             <div className='octopus'>
-                <img src={octopusImg} className="octopus-image" onClick={() => toggleQuiz(true)}/>
+                <img src={octopusImg} className='octopus-image' onClick={() => toggleQuiz(true)}/>
             </div>
 
-            <div className="quiz-area">
+            <div className='quiz-area'>
                 {quizOn && displayQuestion()}
             </div>
 
@@ -201,24 +201,24 @@ function Quiz() {
             </div>
 
             <div className='scoreboard'>
-                {numFish == 1 ? "Score: " + numFish + " fish" :
-                                "Score: " + numFish + " fishes" }
+                {numFish == 1 ? 'Score: ' + numFish + ' fish' :
+                                'Score: ' + numFish + ' fishes' }
             </div>
             
             <div className='difficulty-button-container'>
                 <button
-                    className={`difficulty-button ${difficulty === 1 ? " selected" : ""}`}
+                    className={`difficulty-button ${difficulty === 1 ? ' selected' : ''}`}
                     onClick={() => setDifficulty(1)}>Easy</button>
                 <button
-                    className={`difficulty-button ${difficulty === 2 ? " selected" : ""}`}
+                    className={`difficulty-button ${difficulty === 2 ? ' selected' : ''}`}
                     onClick={() => setDifficulty(2)}>Medium</button>
                 <button
-                    className={`difficulty-button ${difficulty === 3 ? " selected" : ""}`}
+                    className={`difficulty-button ${difficulty === 3 ? ' selected' : ''}`}
                     onClick={() => setDifficulty(3)}>Hard</button>
             </div>
 
             <div className='turtle'>
-                <img src={turtleImg} className="turtle-image" onClick={() => setIsLoggedIn(false)}/>
+                <img src={turtleImg} className='turtle-image' onClick={() => setIsLoggedIn(false)}/>
             </div>
         </div>
     )

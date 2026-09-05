@@ -1,8 +1,57 @@
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f0f8ff;
+.logInPage, .signUpPage {
+	position: absolute;
+	left: 50%;
+	top: 30%;
+	z-index: 2;
+	padding: 20px;
+	transform: translate(-50%, -50%);
+
+	background-color: #eeeeee;
+	width: 400px;
+	border-radius: 30px;
+	text-align: center;
+
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.logInPage h1, .signUpPage h1 {
+	font-size: 30px;
+}
+
+.logInPage p, .signUpPage p {
+	font-size: 18px;
+}
+
+.logInForm, .signUpForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.logInForm input, .signUpForm input {
+	padding: 10px;
+	font-size: 16px;
+	border-radius: 30px;
+	border: 1px solid #ccc;
+	width: 80%;
+}
+
+.logInButton, .signUpButton {
+	padding: 10px 20px;
+	font-size: 18px;
+	border-radius: 30px;
+	color: #222222;
+	background-color: #A9D6A5;
+	width: 100px;
+
+	border: transparent;
+	transition: border-color 0.3s;
+
+	&:hover {
+		background-color: #8FC48C;
+	}
 }
