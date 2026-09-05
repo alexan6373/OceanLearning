@@ -1,5 +1,3 @@
-
-
 .counter {
   font-size: 16px;
   padding: 5px 10px;
@@ -19,12 +17,12 @@
   }
 }
 
-.question {
+.question-form {
   position: absolute;
-  width: 250px;
+  width: 350px;
   height: auto;
-  left: 25%;
-  bottom: 30%;
+  left: 30%;
+  top: 25%;
 
   text-align: center;
   font-size: 20px;
@@ -33,6 +31,37 @@
   border-radius: 30px;
   padding: 15px;
   z-index: 2;
+}
+
+.answer-button {
+  margin-top: 10px;
+  padding: 10px 10px;
+  font-size: 20px;
+  width: 300px;
+  border-radius: 30px;
+  color: #222222;
+  background-color: #A9D6A5;
+  border: transparent;
+  transition: border-color 0.3s;
+
+  &:hover {
+    background-color: #8FC48C;
+  }
+}
+
+.submit-quiz {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 30px;
+  color: #222222;
+  background-color: #A9D6A5;
+  border: transparent;
+  transition: border-color 0.3s;
+
+  &:hover {
+    background-color: #8FC48C;
+  }
 }
 
 .animals {
@@ -54,10 +83,24 @@
   left: 6%;
   bottom: 15%;
   animation: bobbing 6s infinite ease-in-out;
-  z-index: 10;
+  z-index: 2;
 }
 
 .octopus-image {
+  width: 100%;
+  height: 100%;
+}
+
+.turtle {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  right: 6%;
+  bottom: 2%;
+  z-index: 2;
+}
+
+.turtle-image {
   width: 100%;
   height: 100%;
 }
@@ -81,7 +124,8 @@
   padding: 15px;
   text-align: center;
   font-size: 40px;
-  z-index: 3;
+  position: relative;
+  z-index: 2;
 }
 
 .difficulty-button-container {
@@ -90,12 +134,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 2;
 }
 
 .difficulty-button {
   margin: 0 10px;
   padding: 10px 20px;
+  z-index: 2;
+  position: relative;
   font-size: 40px;
   border-radius: 5px;
   color: #222222;
@@ -112,9 +158,6 @@
   }
 }
 
-.difficulty {
-  padding: 15px;
-  text-align: center;
-  font-size: 40px;
-  z-index: 3;
+.difficulty-button.selected {
+  border-color: #222222;
 }

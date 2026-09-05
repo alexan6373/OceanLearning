@@ -6,15 +6,39 @@ import { useEffect, useState } from 'react';
 
 import { supabase } from '../lib/supabaseClient';
 
-function Animals() {
-    const[difficulty, setDifficulty] = useState("Easy");
+function Quiz() {
+    const[difficulty, setDifficulty] = useState(1);
+
+    const difficultyMap = {
+        1: "Easy",
+        2: "Medium",
+        3: "Hard"
+    }
 
     const[quizOn, toggleQuiz] = useState(false);
     
-    // Counter for fish: correct = more fish, incorrect = less fish
+    // ---------------------
+    // Deals with fish logic
+    // ---------------------
     const[numFish, setNumFish] = useState(
         Number(localStorage.getItem("numFish")) || 0
+
+        // for (int i = 0; i < numFish; i++) {
+        //     addFish();
+        // }
     );
+
+    useEffect(() => {
+        const restoredFish = Array.from({ length: numFish }).map((_, i) => ({
+            id: i,
+            bottom: 30 + Math.random() * 60,
+            delay: 0,
+            duration: 4 + Math.random() * 4
+        }));
+
+        setFishes(restoredFish);
+    }, []);
+    
     const[fishes, setFishes] = useState([]);
 
     const addFish = () => {
@@ -36,6 +60,10 @@ function Animals() {
         localStorage.setItem("numFish", Math.max(numFish - 1, 0));
     };
     
+    // ---------------------
+    // Deals with quiz logic
+    // ---------------------
+
     const [question, setQuestion] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
     const [correctAnswer, setCorrectAnswer] = useState("");
@@ -55,11 +83,13 @@ function Animals() {
 
     useEffect(() => {
         getQuestion();
-    }, [])
+    }, [difficulty]);
 
     // Generates a random question
     const getQuestion = async () => {
-        const { data, error } = await supabase.from('questions').select('*')
+        const { data, error } = await supabase.from('questions')
+                                              .select('*')
+                                              .eq('difficulty', difficulty);
 
         if (error) {
             console.error(error);
@@ -69,11 +99,11 @@ function Animals() {
         const question = data[Math.floor(Math.random() * data.length)];
         
         setRandomQuestion(question);
-        if (question.correctAnswer === "A")
+        if (question.correct_answer === "A")
             setCorrectAnswer(question.option_a);
-        else if (question.correctAnswer === "B")
+        else if (question.correct_answer === "B")
             setCorrectAnswer(question.option_b);
-        else
+        else if (question.correct_answer === "C")
             setCorrectAnswer(question.option_c);
     }
     
@@ -91,7 +121,7 @@ function Animals() {
     const displayQuestion = () => {
         if (!randomQuestion) {
             return (
-                <div className='question'>
+                <div className='question-form'>
                     Loading...
                 </div>
             )
@@ -99,28 +129,36 @@ function Animals() {
 
         if (!isSubmitted) {
             return (
-                <div className='question'>
+                <div className='question-form'>
                     <form onSubmit={handleSubmit}>
                         {randomQuestion.question_text} <br/> <br/>
 
-                        <label>
-                            <input type='radio' name='quiz' value={"A"} onChange={changeAnswer} required/>
-                            {"    " + randomQuestion.option_a} <br/>
-                            <input type='radio' name='quiz' value={"B"} onChange={changeAnswer} required/>
-                            {"    " + randomQuestion.option_b} <br/>
-                            <input type='radio' name='quiz' value={"C"} onChange={changeAnswer} required/>
-                            {"    " + randomQuestion.option_c} <br/>
-                        </label>
+                        Question Difficulty: {difficultyMap[randomQuestion.difficulty]} <br/> <br/>
 
+                        <button
+                            className={"answer-button"}
+                            onClick={() => setSelectedAnswer("A")}>
+                            {"    " + randomQuestion.option_a}
+                        </button> <br/>
+
+                        <button
+                            className={"answer-button"}
+                            onClick={() => setSelectedAnswer("B")}>
+                            {"    " + randomQuestion.option_b}
+                        </button> <br/>
+
+                        <button
+                            className={"answer-button"}
+                            onClick={() => setSelectedAnswer("C")}>
+                            {"    " + randomQuestion.option_c}
+                        </button> <br/>
                         <br/>
-
-                        <button type="submit">Submit answer</button>
                     </form>
                 </div>
             )
         } else {
             return (
-                <div className='question'>
+                <div className='question-form'>
                     {selectedAnswer === randomQuestion.correct_answer ?
                     "CORRECT" : (
                         <>
@@ -131,7 +169,7 @@ function Animals() {
 
                     { "Explanation: " + randomQuestion.explanation } <br/> <br/>
 
-                    <button onClick={nextQuestion}>Next Question</button>
+                    <button className='submit-quiz' onClick={nextQuestion}>Next Question</button>
                 </div>
             )
         }
@@ -170,16 +208,18 @@ function Animals() {
             </div>
             
             <div className='difficulty-button-container'>
-                <button className='difficulty-button' onClick={() => setDifficulty("Easy")}>Easy</button>
-                <button className='difficulty-button' onClick={() => setDifficulty("Medium")}>Medium</button>
-                <button className='difficulty-button' onClick={() => setDifficulty("Hard")}>Hard</button>
-            </div>
-            
-            <div className='difficulty'>
-                {difficulty}
+                <button
+                    className={`difficulty-button ${difficulty === 1 ? " selected" : ""}`}
+                    onClick={() => setDifficulty(1)}>Easy</button>
+                <button
+                    className={`difficulty-button ${difficulty === 2 ? " selected" : ""}`}
+                    onClick={() => setDifficulty(2)}>Medium</button>
+                <button
+                    className={`difficulty-button ${difficulty === 3 ? " selected" : ""}`}
+                    onClick={() => setDifficulty(3)}>Hard</button>
             </div>
         </div>
     )
 }
 
-export default Animals;
+export default Quiz;

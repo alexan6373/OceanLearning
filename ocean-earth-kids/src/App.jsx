@@ -1,9 +1,12 @@
 import './App.css'
-import Animals from './Components/Animals.jsx'
+import LogInPage from './Components/LogInPage.jsx';
+import Quiz from './Components/Quiz.jsx'
 import { useState } from 'react';
 
 function App() {
   const bubbleCount = Array.from({ length: 80});
+
+  const[isLoggedIn, setLoggedIn] = useState(false);
 
   return (
     <main className='ocean-container'>
@@ -24,10 +27,10 @@ function App() {
           />
         ))}
       </div>
-
-      <div>
-        <Animals />
-      </div>
+      
+      {isLoggedIn ?
+       <Quiz /> : 
+       <LogInPage />}
 
       <footer className='ocean-floor'>
         <div className='sand'></div>
