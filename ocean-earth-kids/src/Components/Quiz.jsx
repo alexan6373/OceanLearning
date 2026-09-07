@@ -2,6 +2,7 @@ import '../styles/Quiz.css';
 import octopusImg from '../assets/octopus.webp';
 import turtleImg from '../assets/turtle.webp';
 import fishImg from '../assets/fish.png';
+import squidImg from '../assets/squid.webp';
 import { useAuth } from './AuthContext.jsx';
 import { supabase } from '../lib/supabaseClient.js';
 
@@ -9,6 +10,36 @@ import { useEffect, useState } from 'react';
 
 function Quiz() {
     const { isLoggedIn, setIsLoggedIn } = useAuth();
+    
+    const [displaySubscribe, setDisplaySubscribe] = useState(false);
+
+    const openSubscribeBox = () => {
+        setDisplayQuiz(false);
+        setDisplayLogOut(false);
+        setDisplaySubscribe(prev => !prev);
+    }
+
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        setDisplaySubscribe(false);
+        setDisplayQuiz(false);
+    }
+
+    const [displayLogOut, setDisplayLogOut] = useState(false);
+
+    const openLogoutBox = () => {
+        setDisplaySubscribe(false);
+        setDisplayQuiz(false);
+        setDisplayLogOut(prev => !prev);
+    }
+
+    const handleLogOut = (e) => {
+        e.preventDefault();
+        setDisplaySubscribe(false);
+        setDisplayQuiz(false);
+        setDisplayLogOut(false);
+        setIsLoggedIn(false);
+    }
 
     // ---------------------
     // Deals with fish logic
@@ -60,13 +91,18 @@ function Quiz() {
         3: 'Hard'
     }
 
-    const[quizOn, toggleQuiz] = useState(false);
-
+    const[displayQuiz, setDisplayQuiz] = useState(false);
     const [question, setQuestion] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
     const [correctAnswer, setCorrectAnswer] = useState('');
     const [selectedAnswer, setSelectedAnswer] = useState('');
     const [isSubmitted, setSubmitted] = useState(false);
+
+    const startQuiz = () => {
+        if (!displaySubscribe && !displayLogOut) {
+            setDisplayQuiz(true);
+        }
+    }
 
     // Submits the question
     const handleSubmit = (e) => {
@@ -176,11 +212,38 @@ function Quiz() {
     return (
         <div className='animals'>
             <div className='octopus'>
-                <img src={octopusImg} className='octopus-image' onClick={() => toggleQuiz(true)}/>
+                <img src={octopusImg} className='octopus-image' onClick={startQuiz}/>
             </div>
 
             <div className='quiz-area'>
-                {quizOn && displayQuestion()}
+                {displayQuiz && displayQuestion()}
+            </div>
+
+            {displayLogOut && (
+                <div className='logout-box'>
+                    <h1>Would you like to log out?</h1>
+                    <button className='submit-button' onClick={handleLogOut}>Yes</button> <br/>
+                    <button className='submit-button' onClick={() => setDisplayLogOut(false)}>No</button>
+                </div>
+            )}
+
+            <div className='turtle'>
+                <img src={turtleImg} className='turtle-image' onClick={openLogoutBox}/>
+            </div>
+
+            {displaySubscribe && (
+                <div className='subscribe-box'>
+                    <h1>Subscribe to receive fun emails about the environment and sustainability.</h1>
+
+                    <form className='subscribeForm' onSubmit={handleSubscribe}>
+                        <input type='email' placeholder='Email' required />
+                        <button type='submit' className='submit-button' >Submit</button>
+                    </form>
+                </div>
+            )}
+
+            <div className='squid'>
+                <img src={squidImg} className='squid-image' onClick={openSubscribeBox}/>
             </div>
 
             <div className='fishes'>
@@ -215,10 +278,6 @@ function Quiz() {
                 <button
                     className={`difficulty-button ${difficulty === 3 ? ' selected' : ''}`}
                     onClick={() => setDifficulty(3)}>Hard</button>
-            </div>
-
-            <div className='turtle'>
-                <img src={turtleImg} className='turtle-image' onClick={() => setIsLoggedIn(false)}/>
             </div>
         </div>
     )

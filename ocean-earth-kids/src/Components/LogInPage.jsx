@@ -1,6 +1,8 @@
 import '../styles/Login.css';
+import '../styles/Quiz.css';
 import octopusImg from '../assets/octopus.webp';
 import turtleImg from '../assets/turtle.webp';
+import squidImg from '../assets/squid.webp';
 import { useAuth } from './AuthContext.jsx';
 
 import { useState } from 'react';
@@ -54,11 +56,15 @@ function LogInPage() {
             )}
 
             <div className='octopus'>
-                <img src={octopusImg} className='octopus-image' onClick={() => toggleQuiz(true)}/>
+                <img src={octopusImg} className='octopus-image' />
             </div>
 
             <div className='turtle'>
-                <img src={turtleImg} className='turtle-image' onClick={() => toggleQuiz(true)}/>
+                <img src={turtleImg} className='turtle-image'/>
+            </div>
+
+            <div className='squid'>
+                <img src={squidImg} className='squid-image'/>
             </div>
         </>
     );
