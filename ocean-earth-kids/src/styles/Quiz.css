@@ -88,8 +88,8 @@
 
 .squid {
     position: absolute;
-    width: 175px;
-    height: 175px;
+    width: 250px;
+    height: 250px;
     right: 10%;
     top: 10%;
     z-index: 2;

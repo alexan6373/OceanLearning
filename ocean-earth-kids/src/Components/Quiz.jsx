@@ -99,9 +99,9 @@ function Quiz() {
     const [isSubmitted, setSubmitted] = useState(false);
 
     const startQuiz = () => {
-        if (!displaySubscribe && !displayLogOut) {
-            setDisplayQuiz(true);
-        }
+        setDisplaySubscribe(false);
+        setDisplayLogOut(false);
+        setDisplayQuiz(true);
     }
 
     // Submits the question
