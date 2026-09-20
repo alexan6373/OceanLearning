@@ -92,7 +92,7 @@ function Quiz() {
     }
 
     const[displayQuiz, setDisplayQuiz] = useState(false);
-    const [question, setQuestion] = useState([]);
+    // const [question, setQuestion] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
     const [correctAnswer, setCorrectAnswer] = useState('');
     const [selectedAnswer, setSelectedAnswer] = useState('');
@@ -132,6 +132,8 @@ function Quiz() {
 
         const question = data[Math.floor(Math.random() * data.length)];
         
+        console.log({ data, error });
+
         setRandomQuestion(question);
         if (question.correct_answer === 'A')
             setCorrectAnswer(question.option_a);

@@ -5,7 +5,8 @@ import turtleImg from '../assets/turtle.webp';
 import squidImg from '../assets/squid.webp';
 import { useAuth } from './AuthContext.jsx';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabaseClient.js';
 
 function LogInPage() {
     const { isLoggedIn, setIsLoggedIn } = useAuth();
@@ -20,7 +21,50 @@ function LogInPage() {
         e.preventDefault();
         setIsLoggedIn(true);
     };
+    
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [userData, setUserData] = useState(null);
+    
+    useEffect(() => {
+        const checkData = async () => {
+            const { data, error } = await supabase.auth.getSession();
+            setUserData(data);
+        }
 
+        checkData();
+    }, []);
+
+    async function signUp() {
+        const {data, error} = await supabase.auth.signUp({
+            email: email,
+            password: password
+        })
+
+        if (error) {
+            console.error(error);
+            alert("Error signing up"); 
+        } else {
+            setUserData(data);
+            setIsLoggedIn(true);
+        }
+    }
+
+    async function logIn() {
+        const {data, error} = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        })
+
+        if (error) {
+            console.error(error);
+            alert("Error logging in"); 
+        } else {
+            setUserData(data);
+            setIsLoggedIn(true);
+        }
+    }
+    
     return (
         <>
             {logInSignUpPhase === 'log_in' ? (
@@ -29,11 +73,9 @@ function LogInPage() {
 
                     <p>Sign in to learn about the ocean and its inhabitants through fun quizzes and activities.</p>
                     
-                    <form className='logInForm' onSubmit={handleLogIn}>
-                        <input type='text' placeholder='Username' required />
-                        <input type='password' placeholder='Password' required />
-                        <button type='submit' className='logInButton' >Log In</button>
-                    </form>
+                    <input type='email' onChange={(e) => setEmail(e.target.value)} placeholder='Email' required />
+                    <input type='password' onChange={(e) => setPassword(e.target.value)} placeholder='Password' required />
+                    <button type='submit' onClick={logIn} className='logInButton' >Log In</button>
 
                     Need to create an account? <br />
                     <button className='signUpButton' onClick={() => setLogInSignUpPhase('sign_up')}>Sign Up</button>
@@ -44,11 +86,9 @@ function LogInPage() {
 
                     <p>Sign in to learn about the ocean and its inhabitants through fun quizzes and activities.</p>
                     
-                    <form className='signUpForm' onSubmit={handleLogIn}>
-                        <input type='text' placeholder='Username' required />
-                        <input type='password' placeholder='Password' required />
-                        <button type='submit' className='signUpButton' >Sign Up</button>
-                    </form>
+                    <input type='email' onChange={(e) => setEmail(e.target.value)} placeholder='Email' required />
+                    <input type='password' onChange={(e) => setPassword(e.target.value)}  placeholder='Password' required />
+                    <button type='submit' onClick={signUp} className='signUpButton' >Sign Up</button>
 
                     Already have an account? <br />
                     <button className='logInButton' onClick={() => setLogInSignUpPhase('log_in')}>Log In</button>                    {/* </div> */}

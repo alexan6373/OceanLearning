@@ -1,9 +1,10 @@
 import './styles/App.css';
-import LogInPage from './components/LogInPage.jsx';
-import Quiz from './components/Quiz.jsx'
-import { useAuth } from './components/AuthContext.jsx';
+import LogInPage from './Components/LogInPage.jsx';
+import Quiz from './Components/Quiz.jsx'
+import { useAuth } from './Components/AuthContext.jsx';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
 function App() {
     const bubbleCount = Array.from({ length: 80});
