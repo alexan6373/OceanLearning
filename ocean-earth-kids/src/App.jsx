@@ -1,7 +1,7 @@
 import './styles/App.css';
-import LogInPage from './Components/LogInPage.jsx';
-import Quiz from './Components/Quiz.jsx'
-import { useAuth } from './Components/AuthContext.jsx';
+import LogInPage from './components/LogInPage.jsx';
+import Quiz from './components/Quiz.jsx'
+import { useAuth } from './components/AuthContext.jsx';
 
 function App() {
     const bubbleCount = Array.from({ length: 80});
@@ -13,9 +13,8 @@ function App() {
 
             <div className='bubbles' >
                 {bubbleCount.map((_, index) => (
-                    <div 
-                        key={index}
-                        className='bubble'
+                    <div
+                        key={index} className='bubble'
                         style={{
                             left: `${Math.random() * 100}%`,
                             height: `${10 + Math.random() * 20}px`,
@@ -27,10 +26,8 @@ function App() {
                 ))}
             </div>
             
-            {isLoggedIn ?
-            <Quiz /> : 
-            <LogInPage />}
-    
+            { isLoggedIn ? <Quiz /> : <LogInPage /> }
+            
             <footer className='ocean-floor'>
                 <div className='sand'></div>
             </footer>

@@ -9,10 +9,11 @@ import { supabase } from '../lib/supabaseClient.js';
 import { useEffect, useState } from 'react';
 
 function Quiz() {
-    const { isLoggedIn, setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn } = useAuth();
     
+    // Clicking the squid to enable subscribe box
     const [displaySubscribe, setDisplaySubscribe] = useState(false);
-
+    
     const openSubscribeBox = () => {
         setDisplayQuiz(false);
         setDisplayLogOut(false);
@@ -25,6 +26,19 @@ function Quiz() {
         setDisplayQuiz(false);
     }
 
+    // Clicking the turtle to enable log out box
+    const logout = async () => {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        setUserData(null);
+        setIsLoggedIn(false);
+    };
+    
     const [displayLogOut, setDisplayLogOut] = useState(false);
 
     const openLogoutBox = () => {
@@ -38,38 +52,32 @@ function Quiz() {
         setDisplaySubscribe(false);
         setDisplayQuiz(false);
         setDisplayLogOut(false);
-        setIsLoggedIn(false);
+        logout();
     }
 
     // ---------------------
     // Deals with fish logic
     // ---------------------
-    const[numFish, setNumFish] = useState(
-        null
-        // Number(localStorage.getItem('numFish')) || 0
-    );
+    const[numFish, setNumFish] = useState(null);
     const[fishes, setFishes] = useState([]);
 
     useEffect(() => {
         const loadFish = async () => {
-            const {
-                data: { user },
-                error: userError
-            } = await supabase.auth.getUser();
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
 
             if (userError || !user) {
                 console.error(userError);
                 return;
             }
 
-            const { data, error } = await supabase
+            const { data, dataRetrievalError } = await supabase
                 .from('profiles')
                 .select('num_fish')
                 .eq('user_id', user.id)
                 .single();
 
-            if (error) {
-                console.error(error);
+            if (dataRetrievalError) {
+                console.error(dataRetrievalError);
                 return;
             }
 
@@ -77,31 +85,7 @@ function Quiz() {
         };
 
         loadFish();
-
-        // const restoredFish = Array.from({ length: numFish }).map((_, i) => ({
-        //     id: i,
-        //     bottom: 30 + Math.random() * 60,
-        //     delay: 0,
-        //     duration: 4 + Math.random() * 4
-        // }));
-
-        // setFishes(restoredFish);
     }, []);
-
-    useEffect(() => {
-        if (numFish === null) {
-            return;
-        }
-
-        const restoredFish = Array.from({ length: numFish }).map((_, i) => ({
-            id: i,
-            bottom: 30 + Math.random() * 60,
-            delay: 0,
-            duration: 4 + Math.random() * 4
-        }));
-
-        setFishes(restoredFish);
-    }, [numFish]);
 
     const addFish = () => {
         const newFish = Array.from({ length: 1}).map(() => ({

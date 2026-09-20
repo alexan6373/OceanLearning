@@ -9,8 +9,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient.js';
 
 function LogInPage() {
-    const { isLoggedIn, setIsLoggedIn } = useAuth();
-    const [logInSignUpPhase, setLogInSignUpPhase] = useState('log_in');
+    const { setIsLoggedIn } = useAuth();
+    const [authMode, setAuthMode] = useState('log_in');
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -26,56 +26,55 @@ function LogInPage() {
     }, []);
 
     async function signUp() {
-        const {data, error} = await supabase.auth.signUp({
+        const {data, error: signUpError} = await supabase.auth.signUp({
             email: email,
             password: password
         })
 
-        if (error) {
-            console.error(error);
+        if (signUpError) {
+            console.error(signUpError);
             return;
         }
-         
-        setUserData(data);
 
-        const { error: profileError } = await supabase
+        const { error: profileCreationError } = await supabase
             .from('profiles')
             .insert({
                 user_id: data.user.id,
                 num_fish: 0
             });
 
-        if (profileError) {
-            console.error(profileError);
+        if (profileCreationError) {
+            console.error(profileCreationError);
             return;
         }
 
+        setUserData(data);
         setIsLoggedIn(true);
     }
 
     async function logIn() {
-        const {data, error} = await supabase.auth.signInWithPassword({
+        const {data, logInError} = await supabase.auth.signInWithPassword({
             email: email,
             password: password
         })
 
-        if (error) {
-            console.error(error);
-            alert("Error logging in"); 
-        } else {
-            setUserData(data);
-            setIsLoggedIn(true);
+        if (logInError) {
+            console.error(logInError);
+            return;
         }
+
+        setUserData(data);
+        setIsLoggedIn(true);
     }
     
     return (
         <>
             <div className='auth-page'>
-                {logInSignUpPhase === 'log_in' ? (
-                <>
-                    <h1>Welcome to Ocean Learning!</h1> < br/>
-                    <p>Sign in to learn about the ocean and its inhabitants through fun quizzes and activities.</p>    
-                </>
+                {authMode === 'log_in' ? (
+                    <>
+                        <h1>Welcome to Ocean Learning!</h1> < br/>
+                        <p>Sign in to learn about the ocean and its inhabitants through fun quizzes and activities.</p>    
+                    </>
                 ) : (
                     <>
                         <h1>Create an account</h1> < br/>
@@ -86,23 +85,20 @@ function LogInPage() {
                 <input type='email' onChange={(e) => setEmail(e.target.value)} placeholder='Email' required />
                 <input type='password' onChange={(e) => setPassword(e.target.value)}  placeholder='Password' required />
                 
-                {logInSignUpPhase === 'log_in' ? (
-                <>
-                    <button type='submit' onClick={logIn} className='logInButton' >Log In</button>
-
-                    Need to create an account? <br />
-                    <button className='signUpButton' onClick={() => setLogInSignUpPhase('sign_up')}>Sign Up</button>
-                </>
+                {authMode === 'log_in' ? (
+                    <>
+                        <button type='submit' onClick={logIn} className='logInButton' >Log In</button>
+                        Need to create an account? <br />
+                        <button className='signUpButton' onClick={() => authMode('sign_up')}>Sign Up</button>
+                    </>
                 ) : (
-                <>
-                    <button type='submit' onClick={signUp} className='signUpButton' >Sign Up</button>
-
-                    Already have an account? <br />
-                    <button className='logInButton' onClick={() => setLogInSignUpPhase('log_in')}>Log In</button>                    {/* </div> */}
-                </>
+                    <>
+                        <button type='submit' onClick={signUp} className='signUpButton' >Sign Up</button>
+                        Already have an account? <br />
+                        <button className='logInButton' onClick={() => authMode('log_in')}>Log In</button>                    {/* </div> */}
+                    </>
                 )}
             </ div>
-            
 
             <div className='octopus'>
                 <img src={octopusImg} className='octopus-image' />
