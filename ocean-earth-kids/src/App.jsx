@@ -3,12 +3,9 @@ import LogInPage from './Components/LogInPage.jsx';
 import Quiz from './Components/Quiz.jsx'
 import { useAuth } from './Components/AuthContext.jsx';
 
-import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
 function App() {
     const bubbleCount = Array.from({ length: 80});
-    const { isLoggedIn, setIsLoggedIn } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     return (
         <main className='ocean-container'>
@@ -33,7 +30,7 @@ function App() {
             {isLoggedIn ?
             <Quiz /> : 
             <LogInPage />}
-
+    
             <footer className='ocean-floor'>
                 <div className='sand'></div>
             </footer>

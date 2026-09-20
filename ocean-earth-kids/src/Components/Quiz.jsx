@@ -45,10 +45,54 @@ function Quiz() {
     // Deals with fish logic
     // ---------------------
     const[numFish, setNumFish] = useState(
-        Number(localStorage.getItem('numFish')) || 0
+        null
+        // Number(localStorage.getItem('numFish')) || 0
     );
+    const[fishes, setFishes] = useState([]);
 
     useEffect(() => {
+        const loadFish = async () => {
+            const {
+                data: { user },
+                error: userError
+            } = await supabase.auth.getUser();
+
+            if (userError || !user) {
+                console.error(userError);
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('num_fish')
+                .eq('user_id', user.id)
+                .single();
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            setNumFish(data.num_fish);
+        };
+
+        loadFish();
+
+        // const restoredFish = Array.from({ length: numFish }).map((_, i) => ({
+        //     id: i,
+        //     bottom: 30 + Math.random() * 60,
+        //     delay: 0,
+        //     duration: 4 + Math.random() * 4
+        // }));
+
+        // setFishes(restoredFish);
+    }, []);
+
+    useEffect(() => {
+        if (numFish === null) {
+            return;
+        }
+
         const restoredFish = Array.from({ length: numFish }).map((_, i) => ({
             id: i,
             bottom: 30 + Math.random() * 60,
@@ -57,9 +101,7 @@ function Quiz() {
         }));
 
         setFishes(restoredFish);
-    }, []);
-    
-    const[fishes, setFishes] = useState([]);
+    }, [numFish]);
 
     const addFish = () => {
         const newFish = Array.from({ length: 1}).map(() => ({
