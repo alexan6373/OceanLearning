@@ -89,13 +89,13 @@ function LogInPage() {
                     <>
                         <button type='submit' onClick={logIn} className='logInButton' >Log In</button>
                         Need to create an account? <br />
-                        <button className='signUpButton' onClick={() => authMode('sign_up')}>Sign Up</button>
+                        <button className='signUpButton' onClick={() => setAuthMode('sign_up')}>Sign Up</button>
                     </>
                 ) : (
                     <>
                         <button type='submit' onClick={signUp} className='signUpButton' >Sign Up</button>
                         Already have an account? <br />
-                        <button className='logInButton' onClick={() => authMode('log_in')}>Log In</button>                    {/* </div> */}
+                        <button className='logInButton' onClick={() => setAuthMode('log_in')}>Log In</button>                    {/* </div> */}
                     </>
                 )}
             </ div>

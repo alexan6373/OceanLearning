@@ -118,7 +118,6 @@ function Quiz() {
     }
 
     const[displayQuiz, setDisplayQuiz] = useState(false);
-    // const [question, setQuestion] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
     const [correctAnswer, setCorrectAnswer] = useState('');
     const [selectedAnswer, setSelectedAnswer] = useState('');
@@ -176,9 +175,9 @@ function Quiz() {
         getQuestion();
     }
 
-    const changeAnswer = (e) => {
-        setSelectedAnswer(e.target.value);
-    }
+    // const changeAnswer = (e) => {
+    //     setSelectedAnswer(e.target.value);
+    // }
 
     const displayQuestion = () => {
         if (!randomQuestion) {
@@ -189,32 +188,23 @@ function Quiz() {
             )
         }
 
+        const answerChoices = ['A', 'B', 'C'];
+
         if (!isSubmitted) {
             return (
                 <div className='question-form'>
                     <form onSubmit={handleSubmit}>
                         {randomQuestion.question_text} <br/> <br/>
 
-                        Question Difficulty: {difficultyMap[randomQuestion.difficulty]} <br/> <br/>
+                        Difficulty: {difficultyMap[randomQuestion.difficulty]} <br/> <br/>
 
-                        <button
-                            className='answer-button'
-                            onClick={() => setSelectedAnswer('A')}>
-                            {'    ' + randomQuestion.option_a}
-                        </button> <br/>
-
-                        <button
-                            className='answer-button'
-                            onClick={() => setSelectedAnswer('B')}>
-                            {'    ' + randomQuestion.option_b}
-                        </button> <br/>
-
-                        <button
-                            className='answer-button'
-                            onClick={() => setSelectedAnswer('C')}>
-                            {'    ' + randomQuestion.option_c}
-                        </button> <br/>
-                        <br/>
+                        {answerChoices.map((answerChoice) => (
+                            <button
+                                className='answer-button'
+                                onClick={() => setSelectedAnswer(answerChoice)}>
+                                {'    ' + randomQuestion[`option_${answerChoice.toLowerCase()}`]}
+                            </button>
+                        ))}
                     </form>
                 </div>
             )
@@ -224,7 +214,7 @@ function Quiz() {
                     {selectedAnswer === randomQuestion.correct_answer ?
                     'CORRECT' : (
                         <>
-                            NO NO NO MY FRIEND <br/> <br/>
+                            Unforunately that is not correct. <br/> <br/>
                             {'The correct answer is \'' + correctAnswer + '\''}
                         </>
                     )} <br/> <br/>
@@ -237,6 +227,9 @@ function Quiz() {
         }
     }
 
+    const difficultyChoices = [1, 2, 3];
+    const difficulties = ["Easy", "Medium", "Hard"];
+    
     return (
         <div className='animals'>
             <div className='octopus'>
@@ -277,8 +270,7 @@ function Quiz() {
             <div className='fishes'>
                 {fishes.map((fish) => (
                     <div
-                        key={fish.id}
-                        className='fish'
+                        key={fish.id} className='fish'
                         style={{
                             fontSize: `50px`,
                             left:`100%`,
@@ -292,20 +284,19 @@ function Quiz() {
             </div>
 
             <div className='scoreboard'>
-                {numFish == 1 ? 'Score: ' + numFish + ' fish' :
-                                'Score: ' + numFish + ' fishes' }
+                { 'Score: ' + numFish } 
+                {numFish == 1 ? ' fish' : ' fishes' }
             </div>
             
             <div className='difficulty-button-container'>
-                <button
-                    className={`difficulty-button ${difficulty === 1 ? ' selected' : ''}`}
-                    onClick={() => setDifficulty(1)}>Easy</button>
-                <button
-                    className={`difficulty-button ${difficulty === 2 ? ' selected' : ''}`}
-                    onClick={() => setDifficulty(2)}>Medium</button>
-                <button
-                    className={`difficulty-button ${difficulty === 3 ? ' selected' : ''}`}
-                    onClick={() => setDifficulty(3)}>Hard</button>
+                {difficultyChoices.map((difficultyChoice) => (
+                    <button
+                        className={`difficulty-button ${difficulty === difficultyChoice ? ' selected' : ''}`}
+                        onClick={() => setDifficulty(difficultyChoice)}
+                    >
+                        { difficulties[difficultyChoice - 1] }
+                    </button>
+                ))}
             </div>
         </div>
     )
