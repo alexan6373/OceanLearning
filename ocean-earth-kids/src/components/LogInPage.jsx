@@ -9,12 +9,11 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient.js';
 
 function LogInPage() {
-    const { setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn, userData, setUserData } = useAuth();
     const [authMode, setAuthMode] = useState('log_in');
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userData, setUserData] = useState(null);
     
     useEffect(() => {
         const checkData = async () => {

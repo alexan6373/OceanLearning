@@ -9,7 +9,7 @@ import { supabase } from '../lib/supabaseClient.js';
 import { useEffect, useState } from 'react';
 
 function Quiz() {
-    const { setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn, userData, setUserData } = useAuth();
     
     // Clicking the squid to enable subscribe box
     const [displaySubscribe, setDisplaySubscribe] = useState(false);
@@ -87,7 +87,7 @@ function Quiz() {
         loadFish();
     }, []);
 
-    const addFish = () => {
+    const addFish = async () => {
         const newFish = Array.from({ length: 1}).map(() => ({
             id: numFish,
             bottom: 30 + Math.random() * 60,
@@ -95,15 +95,37 @@ function Quiz() {
             duration: 4 + Math.random() * 4
         }));
 
-        setFishes([...fishes, ...newFish]);
+        const {data, error: addFishError } = await supabase
+            .from('profiles')
+            .update({ num_fish: numFish + 1})
+            .eq('user_id', userData.user.id);
+        
+        if (addFishError) {
+            console.error(addFishError);
+            return;
+        }
+
         setNumFish(numFish + 1);
-        localStorage.setItem('numFish', numFish + 1);
+        setFishes([...fishes, ...newFish]);
+        
+        // setNumFish(numFish + 1);
+        // localStorage.setItem('numFish', numFish + 1);
     };
 
-    const removeFish = () => {
-        setFishes(fishes.slice(0, -1));
+    const removeFish = async () => {
+        const {data, error: removeFishError } = await supabase
+            .from('profiles')
+            .update({ num_fish: Math.max(numFish - 1, 0)})
+            .eq('user_id', userData.user.id);
+        
+        if (removeFishError) {
+            console.error(removeFishError);
+            return;
+        }
+
         setNumFish(Math.max(numFish - 1, 0));
-        localStorage.setItem('numFish', Math.max(numFish - 1, 0));
+        setFishes(fishes.slice(0, -1));
+        // localStorage.setItem('numFish', Math.max(numFish - 1, 0));
     };
     
     // ---------------------
@@ -130,12 +152,12 @@ function Quiz() {
     }
 
     // Submits the question
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (selectedAnswer === randomQuestion.correct_answer)
-            addFish();
+            await addFish();
         else
-            removeFish();
+            await removeFish();
 
         setSubmitted(true);
     };
@@ -146,7 +168,7 @@ function Quiz() {
 
     // Generates a random question
     const getQuestion = async () => {
-        const { data, error } = await supabase.from('questions')
+        const { data: questionData, error } = await supabase.from('questions')
                                               .select('*')
                                               .eq('difficulty', difficulty);
 
@@ -155,9 +177,7 @@ function Quiz() {
             return;
         }
 
-        const question = data[Math.floor(Math.random() * data.length)];
-        
-        console.log({ data, error });
+        const question = questionData[Math.floor(Math.random() * questionData.length)];
 
         setRandomQuestion(question);
         if (question.correct_answer === 'A')
@@ -174,10 +194,6 @@ function Quiz() {
         setRandomQuestion(null);
         getQuestion();
     }
-
-    // const changeAnswer = (e) => {
-    //     setSelectedAnswer(e.target.value);
-    // }
 
     const displayQuestion = () => {
         if (!randomQuestion) {
@@ -200,7 +216,7 @@ function Quiz() {
 
                         {answerChoices.map((answerChoice) => (
                             <button
-                                className='answer-button'
+                                key={answerChoice} className='answer-button'
                                 onClick={() => setSelectedAnswer(answerChoice)}>
                                 {'    ' + randomQuestion[`option_${answerChoice.toLowerCase()}`]}
                             </button>
@@ -291,6 +307,7 @@ function Quiz() {
             <div className='difficulty-button-container'>
                 {difficultyChoices.map((difficultyChoice) => (
                     <button
+                        key={difficultyChoice}
                         className={`difficulty-button ${difficulty === difficultyChoice ? ' selected' : ''}`}
                         onClick={() => setDifficulty(difficultyChoice)}
                     >
